@@ -5,8 +5,6 @@ import java.sql.DriverManager;
 import java.util.List;
 import java.util.Vector;
 
-import org.reddragonfly.iplsqldevj.bean.Database;
-
 public class UserBean {
 	
 	private String username;
@@ -36,7 +34,7 @@ public class UserBean {
 			}
 			this.username = username;
 			//======== add end ========
-			String url = "jdbc:oracle:thin:@" +  databaseip + ":" + listenport + ":" + servername;
+			String url = "jdbc:oracle:thin:@//" +  databaseip + ":" + listenport + "/" + servername; // 2018-07-24 smalle 使用推荐格式(解决外网访问时，无法连接内网数据)
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			conn = DriverManager.getConnection(url, username, password);  
 			db = new Database(false,conn); //2009-06-04 phanrider 从true->false 默认不自动提交

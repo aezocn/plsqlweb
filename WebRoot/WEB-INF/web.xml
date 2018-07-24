@@ -41,6 +41,11 @@
             <param-name>classes</param-name>
             <param-value>java.lang.Object</param-value>
         </init-param>
+        <!-- 2018-07-24 smalle 防止跨域报错"Session Error" -->
+        <init-param>
+            <param-name>crossDomainSessionSecurity</param-name>
+            <param-value>false</param-value>
+        </init-param>
     </servlet>
 
     <servlet-mapping>
