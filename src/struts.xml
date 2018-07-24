@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.ui.theme" value="simple" />
+	
+	<package name="myDefault" extends="struts-default">
+	   	<interceptors>
+	       <interceptor name="myInterceptor" class="org.reddragonfly.iplsqldevj.interceptor.MyInterceptor"></interceptor>
+	       <interceptor-stack name="myStack">
+	           <interceptor-ref name="defaultStack"></interceptor-ref>
+	           <interceptor-ref name="myInterceptor"></interceptor-ref>
+	       </interceptor-stack>
+	    </interceptors>
+	    <default-interceptor-ref name="myStack"></default-interceptor-ref>
+	   	<global-results>
+	   	   <result name="input">/login/index.jsp</result>
+	   	   <result name="exception">/login/exception.jsp</result>
+	   	</global-results>
+	   	<global-exception-mappings>
+	   	   <exception-mapping result="exception" exception="java.lang.Exception"></exception-mapping>
+	   	</global-exception-mappings>
+	</package>
+	
+	<package name="login" namespace="/login" extends="myDefault">
+		<action name="login" class="org.reddragonfly.iplsqldevj.action.login.LoginAction"><result name="success">/login/main.jsp</result></action>
+		<action name="quit" class="org.reddragonfly.iplsqldevj.action.login.QuitAction"></action>
+	</package>
+	
+	<package name="tree" namespace="/tree" extends="myDefault">
+		<action name="showTree" class="org.reddragonfly.iplsqldevj.action.tree.ShowTreeAction"></action>
+		<action name="showMenu" class="org.reddragonfly.iplsqldevj.action.tree.ShowMenuAction"></action>
+	</package>
+
+</struts>

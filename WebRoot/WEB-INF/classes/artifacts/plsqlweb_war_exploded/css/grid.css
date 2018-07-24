@@ -1,0 +1,168 @@
+.webfxGrid {
+	border-width: 1px;
+	border-style: solid;
+	border-color: threedshadow threedhighlight threedhighlight threedshadow;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	
+}
+.webfxGridMain {
+	width: 100%;
+	height: 100%;
+	background: #ffffff;
+	overflow: scroll;
+	scrollbar-3dlight-color: threedhighlight;
+	scrollbar-darkshadow-color: threedshadow;
+	scrollbar-highlight-color: buttonface;
+	scrollbar-shadow-color: buttonface;
+}
+
+.webfxGridMainCorner {
+	position:     absolute;
+	top:          0px;
+	left:         0px;
+	width:        35px;
+	height:       16px;
+	overflow:     hidden;
+	background:   buttonface;
+	border-width: 1px;
+	border-style: solid;
+	border-color: threedhighlight threedshadow threedshadow threedhighlight;
+	cursor:       hand;
+	font:         menu;
+}
+
+.webfxGridMainCorner nobr {
+	width: 100%;
+	text-align: right;
+}
+
+.webfxGridMainCorner span {
+	position: absolute;
+	top: 1px;
+	left: 0px;
+	margin-left: 5px;
+	font-family: Marlett;
+}
+
+.webfxGridMainHeader {
+	height: 16px;
+	overflow: hidden;
+	background: buttonface;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+.webfxGridMainHeader span {
+	margin-left: 5px;
+	font-family: Marlett;
+}
+
+.webfxGridMainIdCol {
+	width: 35px;
+	overflow: hidden;
+	background: buttonface;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+.webfxGridMain table, .webfxGridMainHeader table, .webfxGridMainIdCol table {
+	table-layout: fixed;
+	width: 100%;
+	empty-cells: show;
+}
+
+.webfxGridMain table {
+	border-width: 1px;
+	border-style: solid;
+	border-color: threedhighlight threedshadow threedshadow threedhighlight;
+	border-collapse: collapse;
+	background: window;
+}
+
+.webfxGridMain table td, .webfxGridMainHeader table td, .webfxGridMainIdCol table td {
+	font: menu;
+	empty-cells: show;
+	white-space: nowrap;
+	overflow: hidden;
+}
+
+.webfxGridMain table td {
+	border-style: solid;
+	border-color: threedshadow;
+	border-width: 1px 1px 0px 0px;
+	height: 16px;
+	white-space: nowrap;
+	padding: 1px;
+}
+
+.webfxGridMain table td span {
+	display:       block;
+	width:         100%;
+	height:        100%;
+	white-space:   nowrap;
+	overflow:      hidden;
+	text-overflow: ellipsis;
+	font:          menu;
+	cursor:        hand;
+	padding:       0px;
+	border:        0px;
+}
+
+.webfxGridMain table tr.odd td {
+	background:    infobackground;
+}
+
+.webfxGridMain table tr.even td {
+	background:    window;
+}
+
+.webfxGridMain table tr.selected td {
+	border-style: solid;
+	border-color: threedshadow;
+	border-width: 1px 1px 0px 0px;
+	background:   #A9B2CA;
+	color:        windowtext;
+	padding:      0px;
+}
+
+.webfxGridMain table tr.selected td span {
+  border-style: solid;
+  border-color: window;
+  border-width: 1px 0px 1px 0px;
+  padding:      0px 1px 0px 1px;
+}
+
+.webfxGridMain table tr.selected td.selected {
+
+}
+
+.webfxGridMainHeader table td, .webfxGridMainIdCol table td {
+	border-width: 1px;
+	border-style: solid;
+	border-color: buttonhighlight buttonshadow buttonshadow buttonhighlight;
+}
+
+.webfxGridMainHeader table td {
+	height: 16px;
+	cursor: hand;
+}
+
+.IdCol table td {
+	height: 16px;
+	padding: 0px 0px 2px 2px;
+	text-align: right;
+}
+
+.webfxGridBox {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	font: menu;
+	border: 0px;
+	display: none;
+}
+

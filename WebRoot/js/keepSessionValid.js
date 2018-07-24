@@ -1,0 +1,5 @@
+function keepSessionFun() 
+{
+	//alert('keepSessionFun');
+}
+

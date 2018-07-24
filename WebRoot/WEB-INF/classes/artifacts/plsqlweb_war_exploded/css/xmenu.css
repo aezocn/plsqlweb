@@ -1,0 +1,199 @@
+
+.webfx-menu, .webfx-menu * {
+	/*
+	Set the box sizing to content box
+	in the future when IE6 supports box-sizing
+	there will be an issue to fix the sizes
+
+	There is probably an issue with IE5 mac now
+	because IE5 uses content-box but the script
+	assumes all versions of IE uses border-box.
+
+	At the time of this writing mozilla did not support
+	box-sizing for absolute positioned element.
+
+	Opera only supports content-box
+	*/
+	box-sizing:			content-box;
+	-moz-box-sizing:	content-box;
+}
+
+.webfx-menu {
+	position:			absolute;
+	z-index:			100;
+	visibility:			hidden;
+	width:				100px;	border:				1px solid black;
+	padding:			1px;
+	background:			white;
+	filter:				progid:DXImageTransform.Microsoft.Shadow(color="#777777", Direction=135, Strength=4)
+						alpha(Opacity=90);
+	-moz-opacity:		0.9;
+}
+
+.webfx-menu-empty {
+	display:			block;
+	border:				1px solid white;	padding:			2px 5px 2px 5px;
+	font-size:			11px;
+	font-family:		Tahoma, Verdan, Helvetica, Sans-Serfif;
+	color:				black;
+}
+
+.webfx-menu a {
+	display:			block;
+	width:				expression(constExpression(ieBox ? "100%": "auto"));	/* should be ignored by mz and op */	height:				expression(constExpression("1px"));
+	overflow:			visible;		padding:			2px 0px 2px 5px;
+			font-size:			11px;
+	font-family:		Tahoma, Verdan, Helvetica, Sans-Serfif;
+	text-decoration:	none;
+	vertical-align:		center;
+		color:				black;
+	border:				1px solid white;}	
+
+.webfx-menu a:visited,
+.webfx-menu a:visited:hover {
+	color:	black;
+}
+
+.webfx-menu a:hover {
+	color:			black;
+	background:		rgb(234,242,255);/*#ffeedd;*/
+	border:			1px solid rgb(120,172,255);/*#ff8800;*/
+}	
+
+.webfx-menu a .arrow {
+	float:			right;
+	border:			0;
+	width:			3px;
+	margin-right:	3px;	margin-top:		4px;}
+
+/* separtor */
+.webfx-menu div {
+	height:			0;
+	height:			expression(constExpression(ieBox ? "2px" : "0"));
+	border-top:		1px solid rgb(120,172,255);
+	border-bottom:	1px solid rgb(234,242,255);
+	overflow:		hidden;
+	margin:			2px 0px 2px 0px;
+	font-size:		0mm;
+}
+
+.webfx-menu-bar {
+	background:		rgb(120,172,255);/*rgb(255,128,0);*/
+
+	padding:		2px;
+	
+	font-family:	Verdana, Helvetica, Sans-Serif;
+	font-size:		11px;
+	
+	/* IE5.0 has the wierdest box model for inline elements */
+	padding:		expression(constExpression(ie50 ? "0px" : "2px"));
+}
+
+.webfx-menu-bar a,
+.webfx-menu-bar a:visited {
+	border:				1px solid rgb(120,172,255);/*rgb(255,128,0);*/
+	padding:			1px 5px 1px 5px;		color:				black;
+	text-decoration:	none;
+
+	/* IE5.0 Does not paint borders and padding on inline elements without a height/width */
+	height:		expression(constExpression(ie50 ? "17px" : "auto"));
+}
+
+.webfx-menu-bar a:hover {
+	color:			black;
+	background:		rgb(120,172,255);	
+	border-left:	1px solid rgb(234,242,255);
+	border-right:	1px solid rgb(0,66,174);
+	border-top:		1px solid rgb(234,242,255);
+	border-bottom:	1px solid rgb(0,66,174);
+}
+
+.webfx-menu-bar a .arrow {
+	border:			0;
+	float:			none;
+}
+
+.webfx-menu-bar a:active, .webfx-menu-bar a:focus {
+	-moz-outline:	none;
+	outline:		none;
+	/*
+		ie does not support outline but ie55 can hide the outline using
+		a proprietary property on HTMLElement. Did I say that IE sucks at CSS?
+	*/	ie-dummy:		expression(this.hideFocus=true);		border-left:	1px solid rgb(0,66,174);
+	border-right:	1px solid rgb(234,242,255);
+	border-top:		1px solid rgb(0,66,174);
+	border-bottom:	1px solid rgb(234,242,255);}
+	
+
+/*另加其他自己的CSS*/
+.EditorBody  { border-left: 1px solid #999999; border-right: 1px solid #999999; border-top-width: 1px; border-bottom: 1px solid #999999; width:100%; }
+
+.EditorBodyLog  { border-left: 1px solid #999999; border-right: 1px solid #999999; border-top: 1px solid #999999; border-bottom: 1px solid #999999; width:100%; }
+	
+.EditorButton { border-left: 1px solid #999999; border-right: 1px solid #999999; border-top: 1px solid #999999; background-color: buttonface; width:100%; }
+	
+.Normal      { background-color: buttonface; width:25px;}
+	
+.MouseDown   { background-color: #999999; width:25px;}
+	
+.MouseMove   { background-color: #EEEEEE; width:25px;}
+
+.a		{background-color: #E5FFE5; border: 0; height: 12px; border-color: black #999999 #999999 black; border-style: solid; border-top-width: 0px; border-right-width: 1pt; border-bottom-width: 1pt; border-left-width: 0px;
+}
+.b		{background-color: #FFFFFF; border: 0; height: 12px;border-color: black #999999 #999999 black; border-style: solid; border-top-width: 0px; border-right-width: 1pt; border-bottom-width: 1pt; border-left-width: 0px;
+} 
+.c		{background-color: buttonface;border-color: black #999999 #999999 black; border-style: solid; border-top-width: 0px; border-right-width: 1pt; border-bottom-width: 1pt; border-left-width: 0px;
+}
+.d		{background-color: #FFFFE5; border: 0; height: 12px;border-color: black #999999 #999999 black; border-style: solid; border-top-width: 0px; border-right-width: 1pt; border-bottom-width: 1pt; border-left-width: 0px;
+}    
+.tblhead	{BACKGROUND-COLOR: buttonface; COLOR:#FFFFFF 1px solid; FONT-SIZE:12px;}
+.tblborder	{border: 1px solid #eeeeee; FONT-SIZE:12px; cellspacing: 0px solid; cellpadding: 4px;}
+td		{FONT-FAMILY: "Verdana", "Tahoma", "宋体"; FONT-SIZE: 12px; line-height: 120%; color: #000000;}
+iframe {
+	padding-top: 0px;
+	width: 100%;
+	height: 30%;
+	border: 2px inset;
+}
+td.coolButton {
+	font-family: arial;
+	font-size: 14px;
+	width: 25px;
+	height: 16px;
+	font: menu;
+	border: 1px solid buttonface;
+	padding: 1px; text-align: left; cursor: default;
+}
+.div1 {
+	border: 2px inset; 
+	background-color: #FFFFFF; 
+	overflow:auto;width:100%;height:56%;
+	vertical-align:middle;
+	align:center;
+}
+
+a:link { text-decoration: none;}
+.10p {  font-size: 10px; }
+.input_b {
+	border: 0;
+	background-color: #FFFFFF;
+	FONT-FAMILY: "Verdana", "Tahoma", "宋体"; 
+	FONT-SIZE: 11px;
+	border-color: black #999999 #999999 black; border-style: solid; border-top-width: 0px; border-right-width: 1pt; border-bottom-width: 1pt; border-left-width: 0px;
+	
+}
+.input_a {
+	border: 0;
+	background-color: #E5FFE5;
+	FONT-FAMILY: "Verdana", "Tahoma", "宋体"; 
+	FONT-SIZE: 11px;
+	border-color: black #999999 #999999 black; border-style: solid; border-top-width: 0px; border-right-width: 1pt; border-bottom-width: 1pt; border-left-width: 0px;
+}
+.input_d {
+	border: 0;
+	background-color: #FFFFE5;
+	FONT-FAMILY: "Verdana", "Tahoma", "宋体"; 
+	FONT-SIZE: 11px;
+	border-color: black #999999 #999999 black; border-style: solid; border-top-width: 0px; border-right-width: 1pt; border-bottom-width: 1pt; border-left-width: 0px;
+}
+.style1 {font-family: Arial, Helvetica, sans-serif;}
