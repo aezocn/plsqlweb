@@ -1,4 +1,5 @@
-//<script>/*
+//<script>
+/*
  * This script was created by Erik Arvidsson (erik@eae.net)
  * for WebFX (http://webfx.eae.net)
  * Copyright 2001
@@ -6,77 +7,126 @@
  * For usage see license at http://webfx.eae.net/license.html	
  *
  * Created:		2001-01-12
- * Updates:		2001-11-20	Added hover mode support and removed Opera focus hacks *				2001-12-20	Added auto positioning and some properties to support this
+ * Updates:		2001-11-20	Added hover mode support and removed Opera focus hacks
+ *				2001-12-20	Added auto positioning and some properties to support this
  *				2002-08-13	toString used ' for attributes. Changed to " to allow in args
- */ 
+ */
+ 
 // check browsers
 var ua = navigator.userAgent;
-var opera = /opera [56789]|opera\/[56789]/i.test(ua);var ie = !opera && /MSIE/.test(ua);
-var ie50 = ie && /MSIE 5\.[01234]/.test(ua);var ie6 = ie && /MSIE [6789]/.test(ua);
+var opera = /opera [56789]|opera\/[56789]/i.test(ua);
+var ie = !opera && /MSIE/.test(ua);
+var ie50 = ie && /MSIE 5\.[01234]/.test(ua);
+var ie6 = ie && /MSIE [6789]/.test(ua);
 var ieBox = ie && (document.compatMode == null || document.compatMode != "CSS1Compat");
-var moz = !opera && /gecko/i.test(ua);var nn6 = !opera && /netscape.*6\./i.test(ua);// define the default values
+var moz = !opera && /gecko/i.test(ua);
+var nn6 = !opera && /netscape.*6\./i.test(ua);
+// define the default values
 webfxMenuDefaultWidth			= 100;
 
-webfxMenuDefaultBorderLeft		= 1;webfxMenuDefaultBorderRight		= 1;webfxMenuDefaultBorderTop		= 1;webfxMenuDefaultBorderBottom	= 1;
-webfxMenuDefaultPaddingLeft		= 1;webfxMenuDefaultPaddingRight	= 1;
-webfxMenuDefaultPaddingTop		= 1;webfxMenuDefaultPaddingBottom	= 1;
-webfxMenuDefaultShadowLeft		= 0;
+webfxMenuDefaultBorderLeft		= 1;
+webfxMenuDefaultBorderRight		= 1;
+webfxMenuDefaultBorderTop		= 1;
+webfxMenuDefaultBorderBottom	= 1;
+webfxMenuDefaultPaddingLeft		= 1;
+webfxMenuDefaultPaddingRight	= 1;
+webfxMenuDefaultPaddingTop		= 1;
+webfxMenuDefaultPaddingBottom	= 1;
+
+webfxMenuDefaultShadowLeft		= 0;
 webfxMenuDefaultShadowRight		= ie && !ie50 && /win32/i.test(navigator.platform) ? 4 :0;
 webfxMenuDefaultShadowTop		= 0;
 webfxMenuDefaultShadowBottom	= ie && !ie50 && /win32/i.test(navigator.platform) ? 4 : 0;
-webfxMenuItemDefaultHeight		= 18;
+
+webfxMenuItemDefaultHeight		= 18;
 webfxMenuItemDefaultText		= "Untitled";
 webfxMenuItemDefaultHref		= "javascript:void(0)";
 
 webfxMenuSeparatorDefaultHeight	= 6;
 
 webfxMenuDefaultEmptyText		= "Empty";
-webfxMenuDefaultUseAutoPosition	= nn6 ? false : true;
+
+webfxMenuDefaultUseAutoPosition	= nn6 ? false : true;
 
 // other global constants
 webfxMenuImagePath				= "../images/";
 
-wfMUH				= opera ? true : false;webfxMenuHideTime				= 100;
+wfMUH				= opera ? true : false;
+webfxMenuHideTime				= 100;
 webfxMenuShowTime				= 100;
 
 var wFxmhl = {
 	idCounter		:	0,
-	idPrefix		:	"Rfme-",	all				:	{},	getId			:	function () { return this.idPrefix + this.idCounter++; },
-	overMenuItem	:	function (oItem) {		if (this.showTimeout != null)			window.clearTimeout(this.showTimeout);
-		if (this.hideTimeout != null)			window.clearTimeout(this.hideTimeout);
+	idPrefix		:	"Rfme-",
+	all				:	{},
+	getId			:	function () { return this.idPrefix + this.idCounter++; },
+	overMenuItem	:	function (oItem) {
+		if (this.showTimeout != null)
+			window.clearTimeout(this.showTimeout);
+		if (this.hideTimeout != null)
+			window.clearTimeout(this.hideTimeout);
 		var jsItem = this.all[oItem.id];
 		if (webfxMenuShowTime <= 0)
 			this._over(jsItem);
-		else			//this.showTimeout = window.setTimeout(function () { wFxmhl._over(jsItem) ; }, webfxMenuShowTime);
-			//I hate IE5.0 because the piece of shit crashes when using setTimeout with a function object			this.showTimeout = window.setTimeout("wFxmhl._over(wFxmhl.all['" + jsItem.id + "'])", webfxMenuShowTime);
+		else
+			//this.showTimeout = window.setTimeout(function () { wFxmhl._over(jsItem) ; }, webfxMenuShowTime);
+			//I hate IE5.0 because the piece of shit crashes when using setTimeout with a function object
+			this.showTimeout = window.setTimeout("wFxmhl._over(wFxmhl.all['" + jsItem.id + "'])", webfxMenuShowTime);
 	},
 	outMenuItem	:	function (oItem) {
-		if (this.showTimeout != null)			window.clearTimeout(this.showTimeout);
-		if (this.hideTimeout != null)			window.clearTimeout(this.hideTimeout);
+		if (this.showTimeout != null)
+			window.clearTimeout(this.showTimeout);
+		if (this.hideTimeout != null)
+			window.clearTimeout(this.hideTimeout);
 		var jsItem = this.all[oItem.id];
 		if (webfxMenuHideTime <= 0)
 			this._out(jsItem);
-		else			//this.hideTimeout = window.setTimeout(function () { wFxmhl._out(jsItem) ; }, webfxMenuHideTime);
-			this.hideTimeout = window.setTimeout("wFxmhl._out(wFxmhl.all['" + jsItem.id + "'])", webfxMenuHideTime);	},	blurMenu		:	function (oMenuItem) {
+		else
+			//this.hideTimeout = window.setTimeout(function () { wFxmhl._out(jsItem) ; }, webfxMenuHideTime);
+			this.hideTimeout = window.setTimeout("wFxmhl._out(wFxmhl.all['" + jsItem.id + "'])", webfxMenuHideTime);
+	},
+	blurMenu		:	function (oMenuItem) {
 		window.setTimeout("wFxmhl.all[\"" + oMenuItem.id + "\"].subMenu.hide();", webfxMenuHideTime);
 	},
-	_over	:	function (jsItem) {		if (jsItem.subMenu) {
-			jsItem.parentMenu.hideAllSubs();			jsItem.subMenu.show();
+	_over	:	function (jsItem) {
+		if (jsItem.subMenu) {
+			jsItem.parentMenu.hideAllSubs();
+			jsItem.subMenu.show();
 		}
 		else
-			jsItem.parentMenu.hideAllSubs();	},	_out	:	function (jsItem) {
+			jsItem.parentMenu.hideAllSubs();
+	},
+	_out	:	function (jsItem) {
 		// find top most menu
 		var root = jsItem;
-		var m;		if (root instanceof WebFXMenuButton)			m = root.subMenu;		else {
+		var m;
+		if (root instanceof WebFXMenuButton)
+			m = root.subMenu;
+		else {
 			m = jsItem.parentMenu;
-			while (m.parentMenu != null && !(m.parentMenu instanceof WebFXMenuBar))				m = m.parentMenu;		}		if (m != null)	
-			m.hide();		},	hideMenu	:	function (menu) {
-		if (this.showTimeout != null)			window.clearTimeout(this.showTimeout);
-		if (this.hideTimeout != null)			window.clearTimeout(this.hideTimeout);
-		this.hideTimeout = window.setTimeout("wFxmhl.all['" + menu.id + "'].hide()", webfxMenuHideTime);	},	showMenu	:	function (menu, src, dir) {		if (this.showTimeout != null)			window.clearTimeout(this.showTimeout);
-		if (this.hideTimeout != null)			window.clearTimeout(this.hideTimeout);
-		if (arguments.length < 3)			dir = "vertical";
-				menu.show(src, dir);
+			while (m.parentMenu != null && !(m.parentMenu instanceof WebFXMenuBar))
+				m = m.parentMenu;
+		}
+		if (m != null)	
+			m.hide();	
+	},
+	hideMenu	:	function (menu) {
+		if (this.showTimeout != null)
+			window.clearTimeout(this.showTimeout);
+		if (this.hideTimeout != null)
+			window.clearTimeout(this.hideTimeout);
+
+		this.hideTimeout = window.setTimeout("wFxmhl.all['" + menu.id + "'].hide()", webfxMenuHideTime);
+	},
+	showMenu	:	function (menu, src, dir) {
+		if (this.showTimeout != null)
+			window.clearTimeout(this.showTimeout);
+		if (this.hideTimeout != null)
+			window.clearTimeout(this.hideTimeout);
+		if (arguments.length < 3)
+			dir = "vertical";
+		
+		menu.show(src, dir);
 	}
 };
 
@@ -86,17 +136,24 @@ function WebFXMenu() {
 	this.id			= wFxmhl.getId();
 	this.top		= 0;
 	this.left		= 0;
-	this.shown		= false;	this.parentMenu	= null;
+	this.shown		= false;
+	this.parentMenu	= null;
 	wFxmhl.all[this.id] = this;
 }
-WebFXMenu.prototype.width			= webfxMenuDefaultWidth;
-WebFXMenu.prototype.emptyText		= webfxMenuDefaultEmptyText;WebFXMenu.prototype.useAutoPosition	= webfxMenuDefaultUseAutoPosition;
-WebFXMenu.prototype.borderLeft		= webfxMenuDefaultBorderLeft;
+
+WebFXMenu.prototype.width			= webfxMenuDefaultWidth;
+WebFXMenu.prototype.emptyText		= webfxMenuDefaultEmptyText;
+WebFXMenu.prototype.useAutoPosition	= webfxMenuDefaultUseAutoPosition;
+
+WebFXMenu.prototype.borderLeft		= webfxMenuDefaultBorderLeft;
 WebFXMenu.prototype.borderRight		= webfxMenuDefaultBorderRight;
 WebFXMenu.prototype.borderTop		= webfxMenuDefaultBorderTop;
 WebFXMenu.prototype.borderBottom	= webfxMenuDefaultBorderBottom;
-WebFXMenu.prototype.paddingLeft		= webfxMenuDefaultPaddingLeft;
-WebFXMenu.prototype.paddingRight	= webfxMenuDefaultPaddingRight;WebFXMenu.prototype.paddingTop		= webfxMenuDefaultPaddingTop;WebFXMenu.prototype.paddingBottom	= webfxMenuDefaultPaddingBottom;
+
+WebFXMenu.prototype.paddingLeft		= webfxMenuDefaultPaddingLeft;
+WebFXMenu.prototype.paddingRight	= webfxMenuDefaultPaddingRight;
+WebFXMenu.prototype.paddingTop		= webfxMenuDefaultPaddingTop;
+WebFXMenu.prototype.paddingBottom	= webfxMenuDefaultPaddingBottom;
 
 WebFXMenu.prototype.shadowLeft		= webfxMenuDefaultShadowLeft;
 WebFXMenu.prototype.shadowRight		= webfxMenuDefaultShadowRight;
@@ -107,24 +164,33 @@ WebFXMenu.prototype.add = function (menuItem) {
 	this._menuItems[this._menuItems.length] = menuItem;
 	if (menuItem.subMenu) {
 		this._subMenus[this._subMenus.length] = menuItem.subMenu;
-		menuItem.subMenu.parentMenu = this;	}
+		menuItem.subMenu.parentMenu = this;
+	}
 	
 	menuItem.parentMenu = this;
 };
-WebFXMenu.prototype.show = function (relObj, sDir) {
-	if (this.useAutoPosition)		this.position(relObj, sDir);	
+
+WebFXMenu.prototype.show = function (relObj, sDir) {
+	if (this.useAutoPosition)
+		this.position(relObj, sDir);
+	
 	var divElement = document.getElementById(this.id);
 	divElement.style.left = opera ? this.left : this.left + "px";
 	divElement.style.top = opera ? this.top : this.top + "px";
-	divElement.style.visibility = "visible";	this.shown = true;
+	divElement.style.visibility = "visible";
+	this.shown = true;
 	if (this.parentMenu)
-		this.parentMenu.show();};
-WebFXMenu.prototype.hide = function () {
+		this.parentMenu.show();
+};
+
+WebFXMenu.prototype.hide = function () {
 	this.hideAllSubs();
 	var divElement = document.getElementById(this.id);
-	divElement.style.visibility = "hidden";	this.shown = false;
+	divElement.style.visibility = "hidden";
+	this.shown = false;
 };
-WebFXMenu.prototype.hideAllSubs = function () {
+
+WebFXMenu.prototype.hideAllSubs = function () {
 	for (var i = 0; i < this._subMenus.length; i++) {
 		if (this._subMenus[i].shown)
 			this._subMenus[i].hide();
@@ -133,8 +199,12 @@ WebFXMenu.prototype.add = function (menuItem) {
 WebFXMenu.prototype.toString = function () {
 	var top = this.top + this.borderTop + this.paddingTop;
 	var str = "<div id='" + this.id + "' class='webfx-menu' style='" + 
-	"width:" + (!ieBox  ?		this.width - this.borderLeft - this.paddingLeft - this.borderRight - this.paddingRight  : 		this.width) + "px;" +
-	(this.useAutoPosition ?		"left:" + this.left + "px;" + "top:" + this.top + "px;" :		"") +
+	"width:" + (!ieBox  ?
+		this.width - this.borderLeft - this.paddingLeft - this.borderRight - this.paddingRight  : 
+		this.width) + "px;" +
+	(this.useAutoPosition ?
+		"left:" + this.left + "px;" + "top:" + this.top + "px;" :
+		"") +
 	(ie50 ? "filter: none;" : "") +
 	"'>";
 	
@@ -145,10 +215,12 @@ WebFXMenu.prototype.toString = function () {
 		// loop through all menuItems
 		for (var i = 0; i < this._menuItems.length; i++) {
 			var mi = this._menuItems[i];
-			str += mi;			if (!this.useAutoPosition) {
+			str += mi;
+			if (!this.useAutoPosition) {
 				if (mi.subMenu && !mi.subMenu.useAutoPosition)
 					mi.subMenu.top = top - mi.subMenu.borderTop - mi.subMenu.paddingTop;
-				top += mi.height;			}
+				top += mi.height;
+			}
 		}
 
 	}
@@ -161,7 +233,8 @@ WebFXMenu.prototype.toString = function () {
 	}
 	
 	return str;
-};// WebFXMenu.prototype.position defined later
+};
+// WebFXMenu.prototype.position defined later
 function WFXMI(sText, sHref, sToolTip, oSubMenu) {
 	this.text = sText || webfxMenuItemDefaultText;
 	this.href = (sHref == null || sHref == "") ? webfxMenuItemDefaultHref : sHref;
@@ -176,9 +249,14 @@ WFXMI.prototype.height = webfxMenuItemDefaultHeight;
 WFXMI.prototype.toString = function () { //针对有时点击菜单后this.href脚本不能执行的问题，现将this.href转移至onclick事件，这就要求传进来的href必须是脚本而不能再是简单的url(jeanwendy,2009.07.16)
 	return	"<a" +
 			" id='" + this.id + "'" +
-			//" href=\"" + this.href + "\"" +			" href=\"#\"" +			" onclick=\""+this.href+"\"" + 
+			//" href=\"" + this.href + "\"" +
+			" href=\"#\"" +
+			// " onclick=\""+this.href+"\"" +
+			" onmousedown=\""+this.href+"\"" + // 2018-07-26 smalle 解决onblur与onclick事件冲突(先触发onblur菜单关闭事件，再触发点击事件)，通过onmousedown代替onclick。(还可调高webfxMenuHideTime的时间)
 			(this.toolTip ? " title=\"" + this.toolTip + "\"" : "") +
-			" onmouseover='wFxmhl.overMenuItem(this)'" +			(wfMUH ? " onmouseout='wFxmhl.outMenuItem(this)'" : "") +			(this.subMenu ? " unselectable='on' tabindex='-1'" : "") +
+			" onmouseover='wFxmhl.overMenuItem(this)'" +
+			(wfMUH ? " onmouseout='wFxmhl.outMenuItem(this)'" : "") +
+			(this.subMenu ? " unselectable='on' tabindex='-1'" : "") +
 			">" +
 			(this.subMenu ? "<img class='arrow' src=\"" + webfxMenuImagePath + "arrow.right.png\">" : "") +
 			this.text + 
@@ -193,10 +271,13 @@ function WebFXMenuSeparator() {
 WebFXMenuSeparator.prototype.height = webfxMenuSeparatorDefaultHeight;
 WebFXMenuSeparator.prototype.toString = function () {
 	return	"<div" +
-			" id='" + this.id + "'" +			(wfMUH ? 
-			" onmouseover='wFxmhl.overMenuItem(this)'" +			" onmouseout='wFxmhl.outMenuItem(this)'"
+			" id='" + this.id + "'" +
+			(wfMUH ? 
+			" onmouseover='wFxmhl.overMenuItem(this)'" +
+			" onmouseout='wFxmhl.outMenuItem(this)'"
 			:
-			"") +			"></div>"
+			"") +
+			"></div>"
 };
 
 function WebFXMenuBar() {
@@ -228,10 +309,16 @@ WebFXMenuButton.prototype.toString = function () {
 	return	"<a" +
 			" id='" + this.id + "'" +
 			" href='" + this.href + "'" +
-			(this.toolTip ? " title='" + this.toolTip + "'" : "") +			(wfMUH ?				(" onmouseover='wFxmhl.overMenuItem(this)'" +				" onmouseout='wFxmhl.outMenuItem(this)'") :
+			(this.toolTip ? " title='" + this.toolTip + "'" : "") +
+			(wfMUH ?
+				(" onmouseover='wFxmhl.overMenuItem(this)'" +
+				" onmouseout='wFxmhl.outMenuItem(this)'") :
 				(
 					" onfocus='wFxmhl.overMenuItem(this)'" +
-					(this.subMenu ?						" onblur='wFxmhl.blurMenu(this)'" :						""					)
+					(this.subMenu ?
+						" onblur='wFxmhl.blurMenu(this)'" :
+						""
+					)
 				)) +
 			">" +
 			this.text + 
@@ -323,28 +410,55 @@ function getScrollPos(el) {
 				)
 	};
 }
-/* end position functions */
-WebFXMenu.prototype.position = function (relEl, sDir) {
-	var dir = sDir;	// find parent item rectangle, piRect
-	var piRect;	if (!relEl) {
-		var pi = this.parentMenuItem;		if (!this.parentMenuItem)			return;
+
+/* end position functions */
+
+WebFXMenu.prototype.position = function (relEl, sDir) {
+	var dir = sDir;
+	// find parent item rectangle, piRect
+	var piRect;
+	if (!relEl) {
+		var pi = this.parentMenuItem;
+		if (!this.parentMenuItem)
+			return;
 		
-		relEl = document.getElementById(pi.id);		if (dir == null)			dir = pi instanceof WebFXMenuButton ? "vertical" : "horizontal";				piRect = getOuterRect(relEl);
-	}	else if (relEl.left != null && relEl.top != null && relEl.width != null && relEl.height != null) {	// got a rect		piRect = relEl;	}	else		piRect = getOuterRect(relEl);
-		var menuEl = document.getElementById(this.id);
+		relEl = document.getElementById(pi.id);
+		if (dir == null)
+			dir = pi instanceof WebFXMenuButton ? "vertical" : "horizontal";
+		
+		piRect = getOuterRect(relEl);
+	}
+	else if (relEl.left != null && relEl.top != null && relEl.width != null && relEl.height != null) {	// got a rect
+		piRect = relEl;
+	}
+	else
+		piRect = getOuterRect(relEl);
+	
+	var menuEl = document.getElementById(this.id);
 	var menuRect = getOuterRect(menuEl);
 	var docRect = getDocumentRect();
-	var scrollPos = getScrollPos();	var pMenu = this.parentMenu;
-		if (dir == "vertical") {
-		if (piRect.left + menuRect.width - scrollPos.left <= docRect.width)			this.left = piRect.left;		else if (docRect.width >= menuRect.width)			this.left = docRect.width + scrollPos.left - menuRect.width;		else			this.left = scrollPos.left;					if (piRect.top + piRect.height + menuRect.height <= docRect.height + scrollPos.top)
+	var scrollPos = getScrollPos();
+	var pMenu = this.parentMenu;
+	
+	if (dir == "vertical") {
+		if (piRect.left + menuRect.width - scrollPos.left <= docRect.width)
+			this.left = piRect.left;
+		else if (docRect.width >= menuRect.width)
+			this.left = docRect.width + scrollPos.left - menuRect.width;
+		else
+			this.left = scrollPos.left;
+			
+		if (piRect.top + piRect.height + menuRect.height <= docRect.height + scrollPos.top)
 			this.top = piRect.top + piRect.height;
 		else if (piRect.top - menuRect.height >= scrollPos.top)
 			this.top = piRect.top - menuRect.height;
 		else if (docRect.height >= menuRect.height)
 			this.top = docRect.height + scrollPos.top - menuRect.height;
 		else
-			this.top = scrollPos.top;	}
-	else {		if (piRect.top + menuRect.height - this.borderTop - this.paddingTop <= docRect.height + scrollPos.top)
+			this.top = scrollPos.top;
+	}
+	else {
+		if (piRect.top + menuRect.height - this.borderTop - this.paddingTop <= docRect.height + scrollPos.top)
 			this.top = piRect.top - this.borderTop - this.paddingTop;
 		else if (piRect.top + piRect.height - menuRect.height + this.borderTop + this.paddingTop >= 0)
 			this.top = piRect.top + piRect.height - menuRect.height + this.borderBottom + this.paddingBottom + this.shadowBottom;
