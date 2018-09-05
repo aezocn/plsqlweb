@@ -6,21 +6,17 @@
  */
 package org.reddragonfly.iplsqldevj.bean;
 
-import java.io.UnsupportedEncodingException;
+import com.opensymphony.xwork2.ActionContext;
+import org.apache.struts2.ServletActionContext;
+import org.directwebremoting.WebContextFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.struts2.ServletActionContext;
-import org.directwebremoting.WebContextFactory;
-
-
-import com.opensymphony.xwork2.ActionContext;
 
 public class BaisWorkBean {
 	// 当前起始
@@ -60,13 +56,6 @@ public class BaisWorkBean {
 	private List insertDeleteList = new ArrayList();
 	private List execObjectList = new ArrayList();
 
-	/**
-	 * 
-	 * @param startPage
-	 * @param endPage
-	 * @param countPage
-	 * @param sql
-	 */
 	public String initBean(String[] sqlNum) {
 		TableName = "";
 		String[] sqlnum = new String[sqlNum.length];
@@ -172,6 +161,10 @@ public class BaisWorkBean {
 		ResultSet rs = null;
 		pageNo = 20 * (rows - 1) ;
 		countPage = 20 * rows + 1;
+
+		// 2018-9-5 20:59:36 smalle 替换不间断空格(non-breaking space) https://blog.csdn.net/lewky_liu/article/details/79353151
+		this.sql = this.sql.replaceAll("\\u00A0+", " ");
+
 		String sqlCount = "select count(*) from (" + this.sql + ")";
 		if (sqlnum.length >= 3 && sqlnum[2].equals("Q")) {
 //			sql = "SELECT A.* FROM (" + this.sql + " ) A" + " minus "

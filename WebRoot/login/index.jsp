@@ -8,7 +8,7 @@
 
 <html>
 	<head>
-		<title>iPL/SQL Developer -- Oracle Login</title>
+		<title>[测试版] iPL/SQL Developer - Login</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<style>
 			body {

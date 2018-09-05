@@ -5,16 +5,24 @@
 <struts>
 	<constant name="struts.devMode" value="true" />
 	<constant name="struts.ui.theme" value="simple" />
-	
+
 	<package name="myDefault" extends="struts-default">
 	   	<interceptors>
-	       <interceptor name="myInterceptor" class="org.reddragonfly.iplsqldevj.interceptor.MyInterceptor"></interceptor>
-	       <interceptor-stack name="myStack">
-	           <interceptor-ref name="defaultStack"></interceptor-ref>
-	           <interceptor-ref name="myInterceptor"></interceptor-ref>
-	       </interceptor-stack>
+			<interceptor name="Encoding" class="org.reddragonfly.iplsqldevj.interceptor.EncodingInterceptor"></interceptor>
+			<interceptor-stack name="Encode">
+				<interceptor-ref name="Encoding"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref><!-- 必须引入这个，否则request不会再往下传-->
+			</interceptor-stack>
+
+			<interceptor name="myInterceptor" class="org.reddragonfly.iplsqldevj.interceptor.MyInterceptor"></interceptor>
+			<interceptor-stack name="myStack">
+			   <interceptor-ref name="defaultStack"></interceptor-ref>
+			   <interceptor-ref name="myInterceptor"></interceptor-ref>
+			</interceptor-stack>
 	    </interceptors>
-	    <default-interceptor-ref name="myStack"></default-interceptor-ref>
+	    <!--<default-interceptor-ref name="myStack"></default-interceptor-ref>-->
+	    <default-interceptor-ref name="Encode"></default-interceptor-ref>
+
 	   	<global-results>
 	   	   <result name="input">/login/index.jsp</result>
 	   	   <result name="exception">/login/exception.jsp</result>

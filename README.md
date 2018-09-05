@@ -18,5 +18,22 @@
 - Programming Language: Java (struts2)
 - Database Environment: Oracle
 - License: Apache License V2.0
+
+### 代码说明
+
+- 执行SQL
+    - 页面`WebRoot/login/editortoolbar.jsp`
+    - `executeRun(textareaname)`(other.js)
+    - `executeSQL(textareaname)`(other.js) 判断执行SQL类型：查询/插入/删除等
+    - `getResultFromSql(localsql)`(baisworksql.js)
+        
+        ```html
+        <!--
+          BaisWorkBean.GetResultList(sqlNum, callbackadd); // 是基于dwr框架(dwr.jar)完成
+        -->
+        <script type='text/javascript' src='../dwr/interface/BaisWorkBean.js'></script>
+        <script type='text/javascript' src='../dwr/engine.js'></script>
+        ```
+    - `org.reddragonfly.iplsqldevj.bean.BaisWorkBean#GetResultList(String[] sqlNum)`
     
     

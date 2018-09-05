@@ -578,6 +578,7 @@ function mykeydown(myevent,textareaname){
 
 //execute执行按钮的function --正常
 function executeRun(textareaname) {
+	debugger
 	tempSql = getTextareaContents(textareaname);
 	alltmpSql = parent.editorFrame.$(textareaname).get('text');
 	if(tempSql == "") {
@@ -611,6 +612,7 @@ function executeRun(textareaname) {
 //SQL执行控制
 function executeSQL(textareaname) {
 	tempSql = getTextareaContents(textareaname);
+	debugger
 	if (getIfForupdate(textareaname) && getIfSelect(textareaname)) {
 		//如果为for update，并且开始为select
 		//设置commit、rollback按钮可用
