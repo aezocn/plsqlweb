@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Vector;
 
 public class BaisWorkBean {
+	ThreadLocal<HttpServletRequest> requestLocal = new ThreadLocal<HttpServletRequest>();
+
 	// 当前起始
 	int pageNo = 0;
 
@@ -51,11 +53,12 @@ public class BaisWorkBean {
 	String insertResult = "0505";
 
 	// phanrider 2009-05-15 add
-	private List list = new ArrayList();
+	private List list = new ArrayList(); // 第一个元素即为标题数组
 	private List errList = new ArrayList();
 	private List insertDeleteList = new ArrayList();
 	private List execObjectList = new ArrayList();
 
+	@Deprecated
 	public String initBean(String[] sqlNum) {
 		TableName = "";
 		String[] sqlnum = new String[sqlNum.length];
@@ -65,7 +68,7 @@ public class BaisWorkBean {
 		// System.out.println("111="+rows);
 		// 判断sql去掉for update 并且给个标记readonly=1
 		Database db = null;
-		ResultSet rs = null;
+        ResultSet resultSet = null;
 		pageNo = 20 * (rows - 1);
 		countPage = 20 * rows;
 		String sqlCount = "select count(*) from (" + this.sql + ")";
@@ -91,9 +94,9 @@ public class BaisWorkBean {
 			HttpSession session = request.getSession();
 			UserBean ub = (UserBean) session.getAttribute("user");
 			db = ub.getDb();
-			rs = db.getRS(sql);
+			resultSet = db.getRS(sql);
 			this.columnNameCn = null;
-			ResultSetMetaData rsNb = rs.getMetaData();// 得到列表显示的列数
+			ResultSetMetaData rsNb = resultSet.getMetaData();// 得到列表显示的列数
 			this.getColumnCount = rsNb.getColumnCount();// 得到列表显示的列数
 			String[] columnName = new String[getColumnCount];
 			for (int j = 0; j < getColumnCount; j++) {
@@ -120,13 +123,13 @@ public class BaisWorkBean {
 				this.getResultHtml += "</tr>";
 			}
 			int h = 0;
-			while (rs.next()) {
+			while (resultSet.next()) {
 				h++;
 				this.getResultHtml += "<tr" + h
 						+ " ><td class='c'>&nbsp;&nbsp;</td><td>"
 						+ (h + 20 * (rows - 1)) + "</td>";
 				for (int j = 1; j <= getColumnCount; j++) {
-					this.getResultHtml += "<td>" + rs.getString(j) + "</td>";
+					this.getResultHtml += "<td>" + resultSet.getString(j) + "</td>";
 				}
 				this.getResultHtml += "</tr>";
 
@@ -137,8 +140,8 @@ public class BaisWorkBean {
 			e.printStackTrace();
 			//System.out.println("00e=" + e.toString());
 		} finally {
-			if (rs != null) {
-				db.close(rs);
+			if (resultSet != null) {
+				db.close(resultSet);
 			}
 			if (db != null) {
 				// db.cleanup();
@@ -158,7 +161,7 @@ public class BaisWorkBean {
 		// System.out.println("111="+rows);
 		// 判断sql去掉for update 并且给个标记readonly=1
 		Database db = null;
-		ResultSet rs = null;
+		ResultSet resultSet = null;
 		pageNo = 20 * (rows - 1) ;
 		countPage = 20 * rows + 1;
 
@@ -183,14 +186,19 @@ public class BaisWorkBean {
 		}
 		
 		try {
-			HttpServletRequest request = WebContextFactory.get()
-					.getHttpServletRequest();
+			HttpServletRequest request;
+			if(requestLocal.get() == null) {
+				request = WebContextFactory.get().getHttpServletRequest();
+			} else {
+				request = requestLocal.get();
+			}
+
 			HttpSession session = request.getSession();
 			UserBean ub = (UserBean) session.getAttribute("user");
 			db = ub.getDb();
-			rs = db.getRS(sql);
+			resultSet = db.getRS(sql);
 			this.columnNameCn = null;
-			ResultSetMetaData rsNb = rs.getMetaData();// 得到列表显示的列数
+			ResultSetMetaData rsNb = resultSet.getMetaData();// 得到列表显示的列数
 			this.getColumnCount = rsNb.getColumnCount()-1;// 得到列表显示的列数
 			String[] columnName = new String[getColumnCount];
 			for (int j = 0; j < getColumnCount; j++) {
@@ -199,38 +207,25 @@ public class BaisWorkBean {
 
 			Vector vColumn = new Vector();
 			if (rows == 1) {
-				
-				//this.getResultHtml += "<tr>";
-				//this.getResultHtml += "<td class='c'>&nbsp;&nbsp;</td><td class='c'>&nbsp;&nbsp;</td>";
 				for (int i = 0; i < columnName.length; i++) {
-					//this.getResultHtml += "<td>" + columnName[i] + "</td>";
 					vColumn.add(columnName[i]);
 				}
-				//this.getResultHtml += "</tr>";
 				list.add(vColumn);
 			}
 			int h = 0;
-			while (rs.next()) {
+			while (resultSet.next()) {
 				Vector v = new Vector();
 				h++;
-//				this.getResultHtml += "<tr" + h
-//						+ " ><td class='c'>&nbsp;&nbsp;</td><td>"
-//						+ (h + 20 * (rows - 1)) + "</td>";
 				for (int j = 1; j <= getColumnCount; j++) {
-					//this.getResultHtml += "<td>" + rs.getString(j) + "</td>";
 					String value = null;
-					//this.columnNameCn[j] = rs.getString(j);
-					
+
 					//2007-11-4由phanrider加入对"BLOB"或者"CLOB"类型的过滤
 					//如果字段类型是"BLOB"或者"CLOB"类型，则打出"<long>"
-					if ("BLOB".equals(rs.getMetaData().getCatalogName(j)) || 
-							"CLOB".equals( rs.getMetaData().getColumnTypeName(j))) 
+					if ("BLOB".equals(resultSet.getMetaData().getCatalogName(j)) ||
+							"CLOB".equals( resultSet.getMetaData().getColumnTypeName(j)))
 						  value = "&lt;long&gt;";
-					else  value = CharSet.nullToEmpty(rs
+					else  value = CharSet.nullToEmpty(resultSet
 							.getString(j));
-
-					//value = CharSet.nullToEmpty(rs
-					//getString(columnName[i]));
 					 
 					int index = value.indexOf("00:00:00");
 					if (index != -1) {
@@ -239,21 +234,17 @@ public class BaisWorkBean {
 					
 					v.add(value);
 				}
-				//this.getResultHtml += "</tr>";
 				list.add(v);
 			}
-			//this.getResultHtml += "</table>";
-			//System.out.println("001=" + getResultHtml);
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("00e=" + e.getMessage());
 			Vector v = new Vector();
 			v.add("ReddragonflyErrorFlag*");
 			v.add(e.getMessage());
 			errList.add(v);
 		} finally {
-			if (rs != null) {
-				db.close(rs);
+			if (resultSet != null) {
+				db.close(resultSet);
 			}
 			if (db != null) {
 				// db.cleanup();
@@ -633,4 +624,93 @@ public class BaisWorkBean {
 
 	}
 
+	// getter/setter
+
+	public int getCountPage() {
+		return countPage;
+	}
+
+	public String getSql() {
+		return sql;
+	}
+
+	public void setSql(String sql) {
+		this.sql = sql;
+	}
+
+	public String getColumnName() {
+		return columnName;
+	}
+
+	public void setColumnName(String columnName) {
+		this.columnName = columnName;
+	}
+
+	public void setColumnNameCn(String[] columnNameCn) {
+		this.columnNameCn = columnNameCn;
+	}
+
+	public int getGetColumnCount() {
+		return getColumnCount;
+	}
+
+	public void setGetColumnCount(int getColumnCount) {
+		this.getColumnCount = getColumnCount;
+	}
+
+	public static String getTableName() {
+		return TableName;
+	}
+
+	public static void setTableName(String tableName) {
+		TableName = tableName;
+	}
+
+	public String getInsertResult() {
+		return insertResult;
+	}
+
+	public void setInsertResult(String insertResult) {
+		this.insertResult = insertResult;
+	}
+
+	public List getList() {
+		return list;
+	}
+
+	public void setList(List list) {
+		this.list = list;
+	}
+
+	public List getErrList() {
+		return errList;
+	}
+
+	public void setErrList(List errList) {
+		this.errList = errList;
+	}
+
+	public List getInsertDeleteList() {
+		return insertDeleteList;
+	}
+
+	public void setInsertDeleteList(List insertDeleteList) {
+		this.insertDeleteList = insertDeleteList;
+	}
+
+	public List getExecObjectList() {
+		return execObjectList;
+	}
+
+	public void setExecObjectList(List execObjectList) {
+		this.execObjectList = execObjectList;
+	}
+
+	public ThreadLocal<HttpServletRequest> getRequestLocal() {
+		return requestLocal;
+	}
+
+	public void setRequestLocal(ThreadLocal<HttpServletRequest> requestLocal) {
+		this.requestLocal = requestLocal;
+	}
 }

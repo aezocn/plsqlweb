@@ -33,13 +33,17 @@
 	</package>
 	
 	<package name="login" namespace="/login" extends="myDefault">
-		<action name="login" class="org.reddragonfly.iplsqldevj.action.login.LoginAction"><result name="success">/login/main.jsp</result></action>
+		<action name="login" class="org.reddragonfly.iplsqldevj.action.login.LoginAction">
+			<result name="success">/login/main.jsp</result>
+		</action>
 		<action name="quit" class="org.reddragonfly.iplsqldevj.action.login.QuitAction"></action>
+		<action name="exportExcel" class="org.reddragonfly.iplsqldevj.action.ExportAction">
+			<result name="success">/login/main.jsp</result>
+		</action>
 	</package>
 	
 	<package name="tree" namespace="/tree" extends="myDefault">
 		<action name="showTree" class="org.reddragonfly.iplsqldevj.action.tree.ShowTreeAction"></action>
 		<action name="showMenu" class="org.reddragonfly.iplsqldevj.action.tree.ShowMenuAction"></action>
 	</package>
-
 </struts>

@@ -1280,7 +1280,55 @@ function getFYQSql() {
 		getFYQSql_run();
 	}
 }
-   	
+
+// 导出结果导excel 2019年1月2日11:35:10 smalle
+function exportExcel(textareaname) {
+    if(getIfSelect(textareaname)) {
+        //改变相互作用的按钮状态
+        executebuttonpress();
+        //设置页脚注释 正在执行...
+        setFootView(1, "");
+        //改变左下角执行图标状态
+        changeExecNoRun(1, "execIsRunButton");
+        //同时更改左边工具条的状态
+        parent.leftFrameList.changeWindowListTitle(parent.leftFrameList.getWindowType(),parent.leftFrameList.getWindowTr(),parent.editorFrame.$('myTextarea').get('text'));
+
+        var tempSql = getTextareaContents(textareaname);
+		postcall("exportExcel.action", [
+			'sqlNum', tempSql,
+			'sqlNum', 1,
+			'sqlNum', "Q"
+		])
+
+        setFootView(9999, 'Submitted. Please wait for the file to download'); // 已提交，之后自动弹出文件保存对话框
+        breakRun(textareaname);
+    }
+}
+
+function postcall(url, params, target){
+    var tempform = document.createElement("form");
+    tempform.action = url;
+    tempform.method = "post";
+    tempform.style.display="none"
+    if(target) {
+        tempform.target = target;
+    }
+
+    for (var i = 0; i<params.length; i++) {
+        if(i%2 == 1) continue;
+        var opt = document.createElement("input");
+        opt.name = params[i];
+        opt.value = params[i+1];
+        tempform.appendChild(opt);
+    }
+
+    var opt = document.createElement("input");
+    opt.type = "submit";
+    tempform.appendChild(opt);
+    document.body.appendChild(tempform);
+    tempform.submit();
+    document.body.removeChild(tempform);
+}
 
 //是否显示for update时的警告信息   	
 function setWarning(flag) {

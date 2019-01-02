@@ -10,14 +10,14 @@
 
 ![home](home.png)
 
-### iPL/SQL Developer及红蜻蜓工作室介绍
+### 功能说明
 
-- 红蜻蜓工作室官网: http://www.reddragonfly.org
-- iPL/SQL Developer主页: http://iplsqldeveloper.sourceforge.net/
-- iPL/SQL Developer is a reference PL/SQL Developer version of the WEB, according to the pattern all PL/SQL Developer format, can be achieved without the client's database development using JAVA to develop.
-- Programming Language: Java (struts2)
-- Database Environment: Oracle
-- License: Apache License V2.0
+- **支持执行选中语句**
+- 支持多页面执行语句
+- **支持分页**
+- 支持排序
+- **支持结果导出(excel)**
+- 支持历史语句缓存
 
 ### 代码说明
 
@@ -36,4 +36,11 @@
         ```
     - `org.reddragonfly.iplsqldevj.bean.BaisWorkBean#GetResultList(String[] sqlNum)`
     
-    
+### iPL/SQL Developer及红蜻蜓工作室介绍
+
+- 红蜻蜓工作室官网: http://www.reddragonfly.org
+- iPL/SQL Developer主页: http://iplsqldeveloper.sourceforge.net/
+- iPL/SQL Developer is a reference PL/SQL Developer version of the WEB, according to the pattern all PL/SQL Developer format, can be achieved without the client's database development using JAVA to develop.
+- Programming Language: Java (struts2)
+- Database Environment: Oracle
+- License: Apache License V2.0    

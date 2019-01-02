@@ -28,4 +28,5 @@ hs_err_pid*
 
 WebRoot/WEB-INF/classes
 !WebRoot/WEB-INF/classes/.blank
+!WebRoot/WEB-INF/lib/*.jar
 war/*.war
